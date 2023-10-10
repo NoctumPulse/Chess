@@ -3,7 +3,6 @@ package Implementations;
 import ChessPieces.*;
 import chess.*;
 
-import java.awt.image.BufferStrategy;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,32 +59,54 @@ public class ChessGameImpl implements ChessGame {
 
     @Override
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if(chessBoard.getPiece(move.getStartPosition()).getTeamColor() != teamTurn) {
+        if (chessBoard.getPiece(move.getStartPosition()).getTeamColor() != teamTurn) {
             throw new InvalidMoveException("Not this team's turn");
         }
         ChessPositionImpl start = (ChessPositionImpl) move.getStartPosition();
         Set<ChessMove> legalMoves = new HashSet<>(validMoves(start));
-        if(!legalMoves.contains(move)){
+        if (!legalMoves.contains(move)) {
             throw new InvalidMoveException("That move is illegal or not possible");
         }
         ChessPiece chessPiece = null;
-        switch(chessBoard.getPiece(start).getPieceType()){
-            case QUEEN -> chessPiece = new QueenImpl(chessBoard.getPiece(start).getTeamColor());
-            case KING -> chessPiece = new KingImpl(chessBoard.getPiece(start).getTeamColor());
-            case BISHOP -> chessPiece = new BishopImpl(chessBoard.getPiece(start).getTeamColor());
-            case KNIGHT -> chessPiece = new KnightImpl(chessBoard.getPiece(start).getTeamColor());
-            case ROOK -> chessPiece = new RookImpl(chessBoard.getPiece(start).getTeamColor());
-            case PAWN -> chessPiece = new PawnImpl(chessBoard.getPiece(start).getTeamColor());
+        switch (chessBoard.getPiece(start).getPieceType()) {
+            case QUEEN:
+                chessPiece = new QueenImpl(chessBoard.getPiece(start).getTeamColor());
+                break;
+            case KING:
+                chessPiece = new KingImpl(chessBoard.getPiece(start).getTeamColor());
+                break;
+            case BISHOP:
+                chessPiece = new BishopImpl(chessBoard.getPiece(start).getTeamColor());
+                break;
+            case KNIGHT:
+                chessPiece = new KnightImpl(chessBoard.getPiece(start).getTeamColor());
+                break;
+            case ROOK:
+                chessPiece = new RookImpl(chessBoard.getPiece(start).getTeamColor());
+                break;
+            case PAWN:
+                if (move.getPromotionPiece() != null) {
+                    switch (move.getPromotionPiece()) {
+                        case KING -> throw new InvalidMoveException("cannot promote to king");
+                        case QUEEN -> chessPiece = new QueenImpl(chessBoard.getPiece(start).getTeamColor());
+                        case BISHOP -> chessPiece = new BishopImpl(chessBoard.getPiece(start).getTeamColor());
+                        case KNIGHT -> chessPiece = new KnightImpl(chessBoard.getPiece(start).getTeamColor());
+                        case ROOK -> chessPiece = new RookImpl(chessBoard.getPiece(start).getTeamColor());
+                        case PAWN -> throw new InvalidMoveException("cannot promote to pawn");
+                    }
+                } else {
+                    chessPiece = new PawnImpl(chessBoard.getPiece(start).getTeamColor());
+                }
+                break;
         }
         ChessBoardImpl newBoard = new ChessBoardImpl(chessBoard);
         newBoard.removePiece(move.getStartPosition());
         newBoard.removePiece(move.getEndPosition());
         newBoard.addPiece(move.getEndPosition(), (ChessPiece) chessPiece);
         chessBoard = newBoard;
-        if(teamTurn == TeamColor.WHITE){
+        if (teamTurn == TeamColor.WHITE) {
             setTeamTurn(TeamColor.BLACK);
-        }
-        else{
+        } else {
             setTeamTurn(TeamColor.WHITE);
         }
     }
@@ -99,11 +120,11 @@ public class ChessGameImpl implements ChessGame {
     public boolean isInCheckmate(TeamColor teamColor) {
         Set<ChessMove> allValidMoves = new HashSet<>();
         ChessPositionImpl currentPosition;
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                currentPosition = new ChessPositionImpl(i+1, j+1);
-                if(chessBoard.getPiece(currentPosition) != null){
-                    if(chessBoard.getPiece(currentPosition).getTeamColor() == teamColor){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                currentPosition = new ChessPositionImpl(i + 1, j + 1);
+                if (chessBoard.getPiece(currentPosition) != null) {
+                    if (chessBoard.getPiece(currentPosition).getTeamColor() == teamColor) {
                         allValidMoves.addAll(validMoves(currentPosition));
                     }
                 }
@@ -116,17 +137,17 @@ public class ChessGameImpl implements ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
         Set<ChessMove> allValidMoves = new HashSet<>();
         ChessPositionImpl currentPosition;
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                currentPosition = new ChessPositionImpl(i+1, j+1);
-                if(chessBoard.getPiece(currentPosition) != null){
-                    if(chessBoard.getPiece(currentPosition).getTeamColor() == teamColor){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                currentPosition = new ChessPositionImpl(i + 1, j + 1);
+                if (chessBoard.getPiece(currentPosition) != null) {
+                    if (chessBoard.getPiece(currentPosition).getTeamColor() == teamColor) {
                         allValidMoves.addAll(validMoves(currentPosition));
                     }
                 }
             }
         }
-        return(allValidMoves.isEmpty() && getTeamTurn() == teamColor);
+        return (allValidMoves.isEmpty() && getTeamTurn() == teamColor);
     }
 
     @Override
@@ -145,7 +166,7 @@ public class ChessGameImpl implements ChessGame {
         //find king
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                currentPosition = new ChessPositionImpl(i+1, j+1);
+                currentPosition = new ChessPositionImpl(i + 1, j + 1);
                 if (chessBoard.getPiece(currentPosition) != null) {
                     if (chessBoard.getPiece(currentPosition).getPieceType() == ChessPiece.PieceType.KING) {
                         if (chessBoard.getPiece(currentPosition).getTeamColor() == teamColor) {
@@ -158,6 +179,10 @@ public class ChessGameImpl implements ChessGame {
             if (kingPosition != null) {
                 break;
             }
+        }
+        //if king is nonexistent like some tests have return false
+        if (kingPosition == null) {
+            return false;
         }
         //check if any enemy piece can take king
         for (int i = 0; i < 8; i++) {
@@ -185,13 +210,8 @@ public class ChessGameImpl implements ChessGame {
                             case BISHOP:
                             case ROOK:
                             case KNIGHT:
-                                if(kingPosition != null) {
-                                    if (currentMoves.contains(new ChessMoveImpl(currentPosition, kingPosition, null))) {
-                                        return true;
-                                    }
-                                }
-                                else{
-                                    return false;
+                                if (currentMoves.contains(new ChessMoveImpl(currentPosition, kingPosition, null))) {
+                                    return true;
                                 }
                                 break;
                         }

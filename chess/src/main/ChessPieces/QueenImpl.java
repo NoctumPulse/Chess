@@ -25,7 +25,7 @@ public class QueenImpl extends ChessPieceImpl {
         for(int i = 0; i < 8; i++){
             boolean obstacleNotFound = true;
             ChessPosition currentEndPosition = null;
-            int[][] possibleMoveDirections = {{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1},{0,-1},{1,-1}};
+            int[][] possibleMoveDirections = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
             int spaces = 1;
             while(obstacleNotFound){
                 currentEndPosition = new ChessPositionImpl((myPosition.getRow()+(spaces*possibleMoveDirections[i][0])),(myPosition.getColumn()+(spaces*possibleMoveDirections[i][1])));

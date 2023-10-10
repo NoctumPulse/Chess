@@ -15,7 +15,8 @@ public class RookImpl extends ChessPieceImpl {
         teamColor = team;
         pieceType = PieceType.ROOK;
     }
-    public RookImpl(RookImpl rookToCopy){
+
+    public RookImpl(RookImpl rookToCopy) {
         this.teamColor = rookToCopy.teamColor;
         this.pieceType = rookToCopy.pieceType;
     }
