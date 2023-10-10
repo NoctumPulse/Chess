@@ -40,4 +40,20 @@ public class ChessMoveImpl implements ChessMove {
     public int hashCode() {
         return Objects.hash(startPosition, endPosition, promotionPiece);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        output.append("Start: ");
+        output.append(startPosition.toString());
+        output.append("\n");
+        output.append("End: ");
+        output.append(endPosition.toString());
+        if(promotionPiece != null) {
+            output.append("\n");
+            output.append("Promotion: ");
+            output.append(promotionPiece.name());
+        }
+        return output.toString();
+    }
 }

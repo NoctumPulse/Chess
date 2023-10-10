@@ -15,6 +15,10 @@ public class BishopImpl extends ChessPieceImpl {
         teamColor = team;
         pieceType = PieceType.BISHOP;
     }
+    public BishopImpl(BishopImpl bishopToCopy){
+        this.teamColor = bishopToCopy.teamColor;
+        this.pieceType = bishopToCopy.pieceType;
+    }
     @Override
     Collection<ChessMove> moveHelper(ChessBoard chessBoard, ChessPosition myPosition) {
         HashSet<ChessMove> bishopMoves = new HashSet<>();

@@ -15,6 +15,10 @@ public class RookImpl extends ChessPieceImpl {
         teamColor = team;
         pieceType = PieceType.ROOK;
     }
+    public RookImpl(RookImpl rookToCopy){
+        this.teamColor = rookToCopy.teamColor;
+        this.pieceType = rookToCopy.pieceType;
+    }
     @Override
     Collection<ChessMove> moveHelper(ChessBoard chessBoard, ChessPosition myPosition) {
         HashSet<ChessMove> rookMoves = new HashSet<>();

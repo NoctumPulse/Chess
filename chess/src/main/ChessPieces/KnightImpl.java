@@ -15,6 +15,10 @@ public class KnightImpl extends ChessPieceImpl {
         teamColor = team;
         pieceType = PieceType.KNIGHT;
     }
+    public KnightImpl(KnightImpl knightToCopy){
+        this.teamColor = knightToCopy.teamColor;
+        this.pieceType = knightToCopy.pieceType;
+    }
     @Override
     Collection<ChessMove> moveHelper(ChessBoard chessBoard, ChessPosition myPosition) {
         HashSet<ChessMove> knightMoves = new HashSet<>();
