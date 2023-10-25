@@ -1,6 +1,6 @@
-package Implementations;
+package Chess.Implementations;
 
-import ChessPieces.*;
+import Chess.ChessPieces.*;
 import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;

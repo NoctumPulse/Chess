@@ -1,4 +1,4 @@
-package Implementations;
+package Chess.Implementations;
 
 import chess.ChessPosition;
 

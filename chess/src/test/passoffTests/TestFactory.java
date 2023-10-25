@@ -1,10 +1,7 @@
 package passoffTests;
 
-import ChessPieces.*;
-import Implementations.ChessBoardImpl;
-import Implementations.ChessGameImpl;
-import Implementations.ChessMoveImpl;
-import Implementations.ChessPositionImpl;
+import Chess.ChessPieces.*;
+import Chess.Implementations.*;
 import chess.*;
 
 /**

@@ -1,7 +1,8 @@
-import ChessPieces.*;
-import Implementations.ChessBoardImpl;
-import Implementations.ChessGameImpl;
-import Implementations.ChessPositionImpl;
+import Chess.ChessPieces.PawnImpl;
+import Chess.ChessPieces.QueenImpl;
+import Chess.Implementations.ChessBoardImpl;
+import Chess.Implementations.ChessGameImpl;
+import Chess.Implementations.ChessPositionImpl;
 import chess.ChessGame;
 import chess.InvalidMoveException;
 import java.io.IOException;

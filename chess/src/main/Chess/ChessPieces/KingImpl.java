@@ -1,7 +1,7 @@
-package ChessPieces;
+package Chess.ChessPieces;
 
-import Implementations.ChessMoveImpl;
-import Implementations.ChessPositionImpl;
+import Chess.Implementations.ChessMoveImpl;
+import Chess.Implementations.ChessPositionImpl;
 import chess.*;
 
 import java.util.Collection;
