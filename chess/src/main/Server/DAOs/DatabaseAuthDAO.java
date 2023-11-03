@@ -1,6 +1,5 @@
 package Server.DAOs;
 
-import Server.Models.Game;
 import dataAccess.DataAccessException;
 
 import java.util.Set;

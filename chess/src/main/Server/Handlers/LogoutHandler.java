@@ -1,71 +1,34 @@
 package Server.Handlers;
 
+import Server.Requests.LogoutRequest;
+import Server.Results.LogoutResult;
+import Server.Serializers.LogoutResultSerializer;
+import Server.Services.LogoutService;
+import com.google.gson.GsonBuilder;
+import spark.Request;
+import spark.Response;
+
 /**
  * Handler Class for the Logout Web API of the server.
  */
 public class LogoutHandler {
-    /**
-     * LogoutService Class Object for the LogoutHandler Class that processes the request of the handler.
-     */
-    LogoutService service;
+    Object dataStorage;
 
-    /**
-     * Default Constructor for the LogoutHandler Class.
-     * TO DO - understand what the handler needs
-     */
-    LogoutHandler() {
-
+    public LogoutHandler(Object storage) {
+        dataStorage = storage;
     }
 
-    /**
-     * Static Private Inner Class of the LogoutHandler class that represents the object conversion
-     * of the server JSON request.
-     */
-    static private class LogoutRequest {
-        /**
-         * Field representing the authToken of the user logging out.
-         */
-        public String authorization;
+    public Object handleRequest(Request request, Response response) {
+        LogoutResult result;
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.authorization = request.headers("Authorization");
+        LogoutService logoutService = new LogoutService(dataStorage);
+        result = logoutService.logout(logoutRequest);
+        response.status(result.resultCode);
+        response.type("application/json");
+        var builder = new GsonBuilder();
+        builder.registerTypeAdapter(LogoutResult.class, new LogoutResultSerializer());
+        return builder.create().toJson(result);
     }
 
-    /**
-     * Static Private Inner Class of the LogoutHandler class that represents the result of the LogoutService Class.
-     */
-    static private class LogoutResult {
-        /**
-         * Field that represents the message of any error that occurs or is empty if none occur.
-         */
-        public String message;
-    }
-
-    /**
-     * Static Private Inner Class of the LogoutHandler class that acts as the intermediary
-     * between the LogoutHandler and the Data Access Objects (DAOs).
-     */
-    static private class LogoutService {
-        /**
-         * LogoutResult object to hold the results of the LogoutService operation.
-         */
-        public LogoutResult serviceResult;
-
-        /**
-         * Default Constructor of the LogoutService class that executes its operation and stores its result
-         * in serviceResult;
-         *
-         * @param serverRequest The LogoutRequest object made from the JSON server request
-         */
-        public LogoutService(LogoutRequest serverRequest) {
-            serviceResult = processRequest(serverRequest);
-        }
-
-        /**
-         * Method that creates Data Access Objects needed to process the request and runs their commands.
-         *
-         * @return Returns a LogoutResult object with the message of any errors that occurred or an empty string if none.
-         */
-        private LogoutResult processRequest(LogoutRequest serverRequest) {
-            LogoutResult result = new LogoutResult();
-            return result;
-        }
-    }
 }

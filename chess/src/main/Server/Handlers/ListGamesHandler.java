@@ -1,76 +1,38 @@
 package Server.Handlers;
-
-import java.util.TreeSet;
-
-import Server.Models.Game;
+import Server.Requests.ListGamesRequest;
+import Server.Results.ListGamesResult;
+import Server.Services.ListGamesService;
+import Server.Serializers.ListGamesResultSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import spark.Request;
+import spark.Response;
 
 /**
  * Handler Class for the List Games Web API of the server.
  */
 public class ListGamesHandler {
-    /**
-     * ListGamesService Class Object for the ListGamesHandler Class that processes the request of the handler.
-     */
-    ListGamesService service = null;
-
-    /**
-     * Default Constructor for the ListGamesHandler Class.
-     * TO DO - understand what the handler needs
-     */
-    ListGamesHandler() {
-
+    Object dataStorage;
+    public ListGamesHandler(Object storage){
+        dataStorage = storage;
     }
-
-    /**
-     * Static Private Inner Class of the ListGamesHandler class that represents the object conversion
-     * of the server JSON request.
-     */
-    static private class ListGamesRequest {
-        /**
-         * Field representing the authToken of the user asking for the list of games.
-         */
-        public String authorization;
-    }
-
-    /**
-     * Static Private Inner Class of the ListGamesHandler class that represents the result of the ListGamesService Class.
-     */
-    static private class ListGamesResult {
-        /**
-         * Field representing set of Games available.
-         */
-        public TreeSet<Game> games;
-    }
-
-    /**
-     * Static Private Inner Class of the ListGamesHandler class that acts as the intermediary
-     * between the ListGamesHandler and the Data Access Objects (DAOs).
-     */
-    static private class ListGamesService {
-        /**
-         * ListGamesResult object to hold the results of the JoinGameService operation.
-         */
-        public ListGamesResult serviceResult;
-
-        /**
-         * Default Constructor of the ListGamesService class that executes its operation and stores its result
-         * in serviceResult;
-         *
-         * @param serverRequest The ListGamesRequest object made from the JSON server request
-         */
-        public ListGamesService(ListGamesRequest serverRequest) {
-            serviceResult = processRequest(serverRequest);
+    public Object handleRequest(Request request, Response response){
+        ListGamesResult result;
+        try {
+            var gson = new Gson();
+            ListGamesRequest listGamesRequest = gson.fromJson(request.body(), ListGamesRequest.class);
+            ListGamesService registerService = new ListGamesService(dataStorage);
+            result = registerService.listGames(listGamesRequest, request.headers("Authorization"));
         }
-
-        /**
-         * Method that creates Data Access Objects needed to process the request and runs their commands.
-         *
-         * @return Returns a ListGamesResult object with a set of all games available.
-         */
-        private ListGamesResult processRequest(ListGamesRequest serverRequest) {
-            ListGamesResult result = new ListGamesResult();
-            return result;
+        catch(JsonSyntaxException exception){
+            result = new ListGamesResult(500, "Error: bad request");
         }
+        response.type("application/json");
+        response.status(result.resultCode);
+        var builder = new GsonBuilder();
+        builder.registerTypeAdapter(ListGamesResult.class, new ListGamesResultSerializer());
+        System.out.println(builder.create().toJson(result));
+        return builder.create().toJson(result);
     }
-
 }

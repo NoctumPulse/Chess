@@ -102,7 +102,7 @@ public class ChessGameImpl implements ChessGame {
         ChessBoardImpl newBoard = new ChessBoardImpl(chessBoard);
         newBoard.removePiece(move.getStartPosition());
         newBoard.removePiece(move.getEndPosition());
-        newBoard.addPiece(move.getEndPosition(), (ChessPiece) chessPiece);
+        newBoard.addPiece(move.getEndPosition(), chessPiece);
         chessBoard = newBoard;
         if (teamTurn == TeamColor.WHITE) {
             setTeamTurn(TeamColor.BLACK);

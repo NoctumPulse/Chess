@@ -1,6 +1,7 @@
 package Server.DAOs;
 
-import Server.Models.Game;
+import Server.LocalDatabase;
+import Server.Models.User;
 import dataAccess.DataAccessException;
 
 import java.util.Set;
@@ -9,6 +10,10 @@ import java.util.Set;
  * Class for interacting with User Objects in Local Memory Storage
  */
 public class LocalUserDAO implements DAO {
+    LocalDatabase database;
+    public LocalUserDAO(Object storage){
+        database = (LocalDatabase) storage;
+    }
     /**
      * Method for inserting a new User into storage.
      *
@@ -17,7 +22,8 @@ public class LocalUserDAO implements DAO {
      */
     @Override
     public void insert(Object data) throws DataAccessException {
-
+        User newUser = (User) data;
+        database.users.put(newUser.username, newUser);
     }
 
     /**
@@ -29,7 +35,7 @@ public class LocalUserDAO implements DAO {
      */
     @Override
     public Object find(Object data) throws DataAccessException {
-        return null;
+        return database.users.get((String) data);
     }
 
     /**
@@ -73,6 +79,6 @@ public class LocalUserDAO implements DAO {
      */
     @Override
     public void clear() throws DataAccessException {
-
+        database.users.clear();
     }
 }
